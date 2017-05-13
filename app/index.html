@@ -9,9 +9,9 @@
   <h1>Equity Share - Solidity Exercise</h1>
   <table style="width:100%">
     <tr>
-      <th><button id="initialize" onclick="App.initializeEquity()">Initialize App</button></th>
       <th><button id="addprofit" onclick="App.addProfit(100)">Add Profit</button></th>
       <th><button id="voting" onclick="App.toggleVoting()">Enable Voting</button></th>
+      <th><button id="purchase" onclick="App.purchaseStake()">Purchase Stake</button></th>
     </tr>
     <tr>
       <th><div id="founder1">Founder 1</div></th>
@@ -27,6 +27,20 @@
       </td>
       <td>
         <div id="account3"></div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label>Profit Share</label>
+        <span id="profit_share1"></span>
+      </td>
+      <td>
+        <label>Profit Share</label>
+        <span id="profit_share2"></span>
+      </td>
+      <td>
+        <label>Profit Share</label>
+        <span id="profit_share3"></span>
       </td>
     </tr>
     <tr>
@@ -66,6 +80,29 @@
       </td>
       <td>
         <button id="withdraw3" onclick="App.withdrawFrom('account3',10)">Withdraw</button>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <select id="account1Vote">
+          <option value="yes">Dilute Equity</option>
+          <option value="no">Don't dilute</option>
+        </select>
+        <button id="withdraw1" onclick="App.voteOption('account1Vote')">Vote</button>
+      </td>
+      <td>
+        <select id="account2Vote">
+          <option value="yes">Dilute Equity</option>
+          <option value="no">Don't dilute</option>
+        </select>
+        <button id="withdraw2" onclick="App.voteOption('account2Vote')">Vote</button>
+      </td>
+      <td>
+        <select id="account3Vote">
+          <option value="yes">Dilute Equity</option>
+          <option value="no">Don't dilute</option>
+        </select>
+        <button id="withdraw3" onclick="App.voteOption('account3Vote')">Vote</button>
       </td>
     </tr>
   </table>

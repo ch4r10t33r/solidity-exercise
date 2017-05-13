@@ -106,17 +106,23 @@ window.App = {
     }).then(function(value) {
       console.log("Balance of account: "+account+" value: "+value);
       var balance1 = document.getElementById("balance1");
-      balance1.innerHTML = value.valueOf();
+      var profit_share1 = document.getElementById("profit_share1");
+      profit_share1.innerHTML = value.valueOf();
+      balance1.innerHTML = web3.eth.getBalance(account);
       return meta.getBalance.call(account_1);
     }).then( function(value) {
       console.log("Balance of account: "+account_1+" value: "+value);
       var balance2 = document.getElementById("balance2");
-      balance2.innerHTML = value.valueOf();
+      var profit_share2 = document.getElementById("profit_share2");
+      profit_share2.innerHTML = value.valueOf();
+      balance2.innerHTML = web3.eth.getBalance(account_1);
       return meta.getBalance.call(accounts[2]);
     }).then(function(value) {
       console.log("Balance of account: "+accounts[2]+" value: "+value);
       var balance3 = document.getElementById("balance3");
-      balance3.innerHTML = value.valueOf();
+      var profit_share3 = document.getElementById("profit_share3");
+      profit_share3.innerHTML = value.valueOf();
+      balance3.innerHTML = web3.eth.getBalance(accounts[2]);
     }).catch(function(e) {
       console.log(e);
       self.setStatus("Error getting balance; see log.");
@@ -179,10 +185,21 @@ window.App = {
   toggleVoting: function() {
     var self = this;
     var votingText = document.getElementById("voting");
+
+    var account1Vote = document.getElementById("account1Vote");
+    var account2Vote = document.getElementById("account2Vote");
+    var account3Vote = document.getElementById("account3Vote");
+
     if(votingText.innerHTML == 'Enable Voting') {
       votingText.innerHTML = 'Disable Voting';
+      account1Vote.disabled = false;
+      account2Vote.disabled = false;
+      account3Vote.disabled = false;
     } else {
         votingText.innerHTML = 'Enable Voting';
+        account1Vote.disabled = true;
+        account2Vote.disabled = true;
+        account3Vote.disabled = true;
     }
     var meta;
     //EquityShare.deployed().then(function(instance) {
