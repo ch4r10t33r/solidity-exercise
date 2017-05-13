@@ -10,3 +10,10 @@ The contract must be able to do the following:
 4. Allow all shareholders to hold a vote, which if passing 51% agreement, allows them to dilute all of their own shares and issue a % of new equity at a valuation that is equal to 100 multiplied by the profits accrued during the previous month.
 5. Allow new users to buy the new equity at the offered price following a successful vote, to become shareholders themselves.
 6. Allow all interaction with the smart contracts to occur via the browser, including letting shareholders check their balance of profits to be paid.
+
+# To run the app:
+1. clone the code your machine.
+2. run test rpc
+3. <cloned-location>/npm run dev
+4. The application can be accessed from http://localhost:8080/
+
