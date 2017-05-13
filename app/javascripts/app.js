@@ -12,7 +12,7 @@ import equityshare_artifacts from '../../build/contracts/EquityShare.json'
 
 //var MetaCoin = contract(metacoin_artifacts);
 var EquityShare = contract(equityshare_artifacts);
-var deployedAt = "0x7000a7ac64b0ad57764a483f5d88f72682ff764a";
+var deployedAt = "0xba6652a1580fcbfd9aebb5a52991d194fe9d3f3c";
 
 // The following code is simple to show off interacting with your contracts.
 // As your needs grow you will likely need to change its form and structure.
@@ -45,7 +45,7 @@ window.App = {
 
       accounts = accs;
       account = accounts[0];
-      account_1 = "0xf187c7588b64ba80891ac5159317e5b41c052851";
+      account_1 = "0xc75204fb8e513e42d7c17d4c5071f43da7dd5d16";
       web3.eth.defaultAccount = account;
 
       var account1 = document.getElementById("account1");
@@ -56,6 +56,20 @@ window.App = {
 
       var account3 = document.getElementById("account3");
       account3.innerHTML = accounts[2];
+
+      var account1Vote = document.getElementById("account1Vote");
+      account1Vote.disabled = true;
+      var account2Vote = document.getElementById("account2Vote");
+      account2Vote.disabled = true;
+      var account3Vote = document.getElementById("account3Vote");
+      account3Vote.disabled = true;
+
+      var vote1 = document.getElementById("vote1");
+      vote1.disabled = true;
+      var vote2 = document.getElementById("vote2");
+      vote2.disabled = true;
+      var vote3 = document.getElementById("vote3");
+      vote3.disabled = true;
 
       var meta;
       //console.log("Deployed EquityShare: " + EquityShare.deployed());
@@ -133,20 +147,43 @@ window.App = {
     var self = this;
     var meta;
     //EquityShare.deployed().then(function(instance) {
-    EquityShare.at(deployedAt).then(function(instance) {
-      meta = instance;
-      return meta.getEquity.call(account);
-    }).then(function(value) {
-      var equity1_value = document.getElementById("equity1");
-      equity1_value.innerHTML = value.valueOf();
-      return meta.getEquity.call(account2.innerHTML);
-    }).then(function(value) {
-      var equity2_value = document.getElementById("equity2");
-      equity2_value.innerHTML = value.valueOf();
-    }).catch(function(e) {
-      console.log(e);
-      self.setStatus("Error getting equity; see log.");
-    });
+    var founder3 = document.getElementById("founder3");
+    if(founder3.innerHTML == "-") {
+      EquityShare.at(deployedAt).then(function(instance) {
+        meta = instance;
+        return meta.getEquity.call(account);
+      }).then(function(value) {
+        var equity1_value = document.getElementById("equity1");
+        equity1_value.innerHTML = value.valueOf();
+        return meta.getEquity.call(account2.innerHTML);
+      }).then(function(value) {
+        var equity2_value = document.getElementById("equity2");
+        equity2_value.innerHTML = value.valueOf();
+      }).catch(function(e) {
+        console.log(e);
+        self.setStatus("Error getting equity; see log.");
+      });
+    }
+    else {
+      EquityShare.at(deployedAt).then(function(instance) {
+        meta = instance;
+        return meta.getEquity.call(account);
+      }).then(function(value) {
+        var equity1_value = document.getElementById("equity1");
+        equity1_value.innerHTML = value.valueOf();
+        return meta.getEquity.call(account2.innerHTML);
+      }).then(function(value) {
+        var equity2_value = document.getElementById("equity2");
+        equity2_value.innerHTML = value.valueOf();
+        return meta.getEquity.call(account3.innerHTML);
+      }).then(function(value) {
+        var equity3_value = document.getElementById("equity3");
+        equity3_value.innerHTML = value.valueOf();
+      }).catch(function(e) {
+        console.log(e);
+        self.setStatus("Error getting equity; see log.");
+      });
+    }
   },
 
   addProfit: function (value) {
@@ -173,7 +210,7 @@ window.App = {
     //EquityShare.deployed().then(function(instance) {
     EquityShare.at(deployedAt).then(function(instance) {
       meta = instance;
-      return meta.withdrawBalance(person.innerHTML,value,{from: account, gas: 4000000});
+      return meta.withdrawBalance(person.innerHTML,value,{from: person.innerHTML, gas: 4000000});
     }).then(function(result) {
       console.log("Result of withdrawBalance: " + result.valueOf());
       self.refreshBalance();
@@ -189,17 +226,26 @@ window.App = {
     var account1Vote = document.getElementById("account1Vote");
     var account2Vote = document.getElementById("account2Vote");
     var account3Vote = document.getElementById("account3Vote");
+    var vote1 = document.getElementById("vote1");
+    var vote2 = document.getElementById("vote2");
+    var vote3 = document.getElementById("vote3");
 
     if(votingText.innerHTML == 'Enable Voting') {
       votingText.innerHTML = 'Disable Voting';
       account1Vote.disabled = false;
       account2Vote.disabled = false;
       account3Vote.disabled = false;
+      vote1.disabled = false;
+      vote2.disabled = false;
+      vote3.disabled = false;
     } else {
         votingText.innerHTML = 'Enable Voting';
         account1Vote.disabled = true;
         account2Vote.disabled = true;
         account3Vote.disabled = true;
+        vote1.disabled = true;
+        vote2.disabled = true;
+        vote3.disabled = true;
     }
     var meta;
     //EquityShare.deployed().then(function(instance) {
@@ -213,6 +259,78 @@ window.App = {
       self.setStatus("Error toggleStatus; see log.");
     });
   },
+
+  voteOption: function(param,value) {
+    var person = document.getElementById(param);
+    var vote = document.getElementById(value);
+    console.log(person.innerHTML + " has voted to " + vote.value);
+    var voted;
+    if(vote.value == "yes") {
+      voted = 1;
+    }
+    else {
+      voted = 2;
+    }
+
+    var meta;
+    EquityShare.at(deployedAt).then(function(instance) {
+      meta = instance;
+      return meta.vote(voted,{from: person.innerHTML, gas: 4000000});
+    }).then(function(result) {
+      console.log("Result of voting: " + result);
+    }).catch(function(e) {
+      console.log(e);
+      self.setStatus("Error voting; see log.");
+    });
+  },
+
+  purchaseStake: function(amount) {
+    var person = document.getElementById("account3");
+    var self = this;
+    var meta;
+    //EquityShare.deployed().then(function(instance) {
+    EquityShare.at(deployedAt).then(function(instance) {
+      meta = instance;
+      return meta.votingResult({from: account, gas: 4000000});
+    }).then(function(result) {
+      console.log("Voting Result: "+result);
+      return meta.purchaseStake(person.innerHTML,amount,{from: person.innerHTML, gas: 4000000});
+    }).then(function(result) {
+      console.log("Result of purchaseStake: " + result.valueOf());
+      document.getElementById("founder3").innerHTML = "Founder 3";
+      self.refreshBalance();
+      self.refreshEquities();
+    }).catch(function(e) {
+      console.log(e);
+      self.setStatus("Error purchaseStake; see log.");
+    });
+  },
+
+  transferStake: function(param,value) {
+    var source = document.getElementById(param);
+    var dest;
+    if(param == "account1") {
+      dest = document.getElementById("account2");
+    }
+    else {
+      dest = document.getElementById("account1");
+    }
+    console.log("Transfering "+value+"% stake from "+source.innerHTML+" to "+dest.innerHTML);
+    var self = this;
+    var meta;
+    //EquityShare.deployed().then(function(instance) {
+    EquityShare.at(deployedAt).then(function(instance) {
+      meta = instance;
+      return meta.transferStake(dest.innerHTML,value,{from: source.innerHTML, gas: 4000000});
+    }).then(function(result) {
+      console.log("Result of transferStake: " + result.valueOf());
+      self.refreshBalance();
+      self.refreshEquities();
+    }).catch(function(e) {
+      console.log(e);
+      self.setStatus("Error transferStake; see log.");
+    });
+  }
 };
 
 window.addEventListener('load', function() {

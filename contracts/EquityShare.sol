@@ -171,6 +171,7 @@ contract EquityShare {
         status = 1;
       }
     }
+    return status;
   }
 
   function purchaseStake(uint amount) payable returns (bool) {
@@ -180,7 +181,7 @@ contract EquityShare {
         valuation += profits[i];
       }
       valuation *= 100;
-      uint equity = (amount*100/valuation);
+      uint equity = (amount*100)/valuation;
       uint dilution = 100 - equity;
       for(i=0;i<shareHolders.length;i++) {
         shareHolders[i].equity -= (dilution/shareHolders.length);
