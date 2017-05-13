@@ -8,6 +8,7 @@ contract EquityShare {
   struct ShareHolder {
 		address person;
 		uint equity;
+    uint profitShare;
     /*
     * votingStatus = 1, Approve Dilution
     * votingStatus = 2, Disapprove Dilution
@@ -28,9 +29,18 @@ contract EquityShare {
   event voted(string msg);
 
   //List of functions used for functionality
+  /*
   function EquityShare() {
     owner = msg.sender;
     shareHolders.push(ShareHolder(msg.sender,100,0));
+    status = 1;
+  }
+  */
+  function EquityShare(address person,uint equity) payable {
+    owner = msg.sender;
+    uint ownerEquity = 100 - equity;
+    shareHolders.push(ShareHolder(msg.sender,ownerEquity,0,0));
+    shareHolders.push(ShareHolder(person,equity,0,0));
     status = 1;
   }
 
@@ -55,7 +65,7 @@ contract EquityShare {
   		for(uint i=0;i<shareHolders.length;i++) {
   			shareHolders[i].equity -= (diluted)/shareHolders.length;
   		}
-  		shareHolders.push(ShareHolder(person,equity,0));
+  		shareHolders.push(ShareHolder(person,equity,0,0));
       return true;
     }
     return false;
@@ -73,7 +83,7 @@ contract EquityShare {
                 return true;
               }
             }
-            shareHolders.push(ShareHolder(target,stake,0));
+            shareHolders.push(ShareHolder(target,stake,0,0));
             return true;
         }
       }
@@ -83,27 +93,38 @@ contract EquityShare {
   }
 
   //method of splitting the profit amongst the share holders
-  function addProfit(uint profit) payable {
+  function addProfit(uint profit) payable returns (uint){
     profits.push(profit);
     uint share = 0;
     for(uint i=0; i< shareHolders.length ; i++ ) {
-       share = profit * (shareHolders[i].equity/100);
-       balances[shareHolders[i].person] += share;
+       share = (profit * shareHolders[i].equity)/100;
+       //balances[shareHolders[i].person] += share;
+       shareHolders[i].profitShare += share;
     }
+    return profits.length;
   }
 
   //method to withdraw balance from an account
-  function withdrawBalance(uint amount) payable returns (bool) {
-    if(balances[msg.sender] >= amount) {
-      balances[msg.sender] -= amount;
-      return true;
+  function withdrawBalance(address person,uint amount) payable returns (bool) {
+    for(uint i=0;i<shareHolders.length;i++) {
+      if(person == shareHolders[i].person) {
+        if(shareHolders[i].profitShare >= amount) {
+          shareHolders[i].profitShare -= amount;
+          return person.send(amount);
+        }
+      }
     }
     return false;
   }
 
   //method to fetch balance from an account
   function getBalance(address person) returns (uint) {
-      return balances[person];
+    for(uint i=0; i< shareHolders.length ; i++ ) {
+      if(shareHolders[i].person == person) {
+        return shareHolders[i].profitShare;
+      }
+    }
+    return 0;
   }
 
   //method that returns the current equity for a person
@@ -129,7 +150,7 @@ contract EquityShare {
     return false;
   }
 
-  function votingResult() returns (uint) {
+  function votingResult() payable returns (uint) {
     if(status == 2) {
       uint approved = 0;
       uint disapproved = 0;
@@ -164,7 +185,7 @@ contract EquityShare {
       for(i=0;i<shareHolders.length;i++) {
         shareHolders[i].equity -= (dilution/shareHolders.length);
       }
-      shareHolders.push(ShareHolder(msg.sender,equity,0));
+      shareHolders.push(ShareHolder(msg.sender,equity,0,0));
     }
     return false;
   }

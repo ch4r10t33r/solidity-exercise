@@ -6,12 +6,11 @@
   <script src="./app.js"></script>
 </head>
 <body>
-  <h1>Equity Share</h1>
-  <h2>Example Dapp - Solidity Exercise</h2>
-  <table>
+  <h1>Equity Share - Solidity Exercise</h1>
+  <table style="width:100%">
     <tr>
       <th><button id="initialize" onclick="App.initializeEquity()">Initialize App</button></th>
-      <th><button id="addprofit" onclick="App.addProfit()">Add Profit</button></th>
+      <th><button id="addprofit" onclick="App.addProfit(100)">Add Profit</button></th>
       <th><button id="voting" onclick="App.toggleVoting()">Enable Voting</button></th>
     </tr>
     <tr>
@@ -60,13 +59,13 @@
     </tr>
     <tr>
       <td>
-        <button id="withdraw1">Withdraw</button>
+        <button id="withdraw1" onclick="App.withdrawFrom('account1',10)">Withdraw</button>
       </td>
       <td>
-        <button id="withdraw2">Withdraw</button>
+        <button id="withdraw2" onclick="App.withdrawFrom('account2',10)">Withdraw</button>
       </td>
       <td>
-        <button id="withdraw3">Withdraw</button>
+        <button id="withdraw3" onclick="App.withdrawFrom('account3',10)">Withdraw</button>
       </td>
     </tr>
   </table>
