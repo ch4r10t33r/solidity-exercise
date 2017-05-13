@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Equity Split - Dapp Demo w/ Frontend</title>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+  <script src="./app.js"></script>
+</head>
+<body>
+  <h1>Equity Share</h1>
+  <h2>Example Dapp - Solidity Exercise</h2>
+  <table>
+    <tr>
+      <th><button id="initialize" onclick="App.initializeEquity()">Initialize App</button></th>
+      <th><button id="addprofit" onclick="App.addProfit()">Add Profit</button></th>
+      <th><button id="voting" onclick="App.toggleVoting()">Enable Voting</button></th>
+    </tr>
+    <tr>
+      <th><div id="founder1">Founder 1</div></th>
+      <th><div id="founder2">Founder 2</div></th>
+      <th><div id="founder3"> - </div></th>
+    </tr>
+    <tr>
+      <td>
+        <label>Address</label>
+        <input type="text" id="founder_1" value="" readonly/>
+      </td>
+      <td>
+        <label>Address</label>
+        <input type="text" id="founder_2" value="" readonly/>
+      </td>
+      <td>
+        <label>Address</label>
+        <input type="text" id="founder_3" value="" readonly/>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label>Balance</label>
+        <span id="balance1"></span>
+      </td>
+      <td>
+        <label>Balance</label>
+        <span id="balance2"></span>
+      </td>
+      <td>
+        <label>Balance</label>
+        <span id="balance3"></span>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label>Equity</label>
+        <span id="equity1"></span>
+      </td>
+      <td>
+        <label>Equity</label>
+        <span id="equity2"></span>
+      </td>
+      <td>
+        <label>Equity</label>
+        <span id="equity3"></span>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <button id="withdraw1">Withdraw</button>
+      </td>
+      <td>
+        <button id="withdraw2">Withdraw</button>
+      </td>
+      <td>
+        <button id="withdraw3">Withdraw</button>
+      </td>
+    </tr>
+  </table>
+  <br>
+  <br><br>
+  <span id="status"></span>
+  <br>
+  <span class="hint"><strong>Hint:</strong> open the browser developer console to view any errors and warnings.</span>
+</body>
+</html>
